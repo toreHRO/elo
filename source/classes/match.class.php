@@ -21,7 +21,7 @@ class match {
     // ID: 1 = Liga, 2 = Pokal, 3 = International; 4 = Freundschaftsspiel
     private $comp;
     
-    public function __construct( $_id, $_home = 0, $_away = 0, $_venue = 0, $_comp = 0 ) {
+    public function __construct( $_id, team $_home, team $_away, $_venue = 0, $_comp = 0 ) {
 		if ( $_id ) {
 			// Daten aus MySQL-DB holen
 		}
@@ -91,6 +91,11 @@ class match {
     }
 
 	public function get_home_expected() {
+		if ( !$this->home_expected ) {
+			$expected_scores = calculate_expected_score( $this->home, $this->away );
+			$this->home_expected = $expected_scores[ "home" ];
+			$this->away_expected = $expected_scores[ "away" ];
+		}
 		return $this->home_expected;
 	}
 
@@ -99,12 +104,28 @@ class match {
 	}
 
 	public function get_away_expected() {
+		if ( !$this->away_expected ) {
+			$expected_scores = calculate_expected_score( $this->home, $this->away );
+			$this->home_expected = $expected_scores[ "home" ];
+			$this->away_expected = $expected_scores[ "away" ];
+		}
 		return $this->away_expected;
 	}
 
 	public function set_away_expected($away_expected) {
 		$this->away_expected = $away_expected;
-	}    
+	}   
+	
+	public function save_new_ratings() {
+		$changes = calculate_rating_changes( $this );
+		$home_new = $this->home->get_rating + $changes[ "home" ];
+		$away_new = $this->away->get_rating + $changes[ "away" ];
+		
+		$this->home->set_rating( $home_new );
+		$this->away->set_rating( $away_new );
+		
+		// In DB schreiben
+	}
 }
 
 ?>
