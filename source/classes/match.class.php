@@ -1,4 +1,6 @@
 <?php
+require_once 'calculations.php';
+require_once 'classes/team.class.php';
 
 /**
  * Description of match
@@ -18,27 +20,27 @@ class match {
 	private $away_expected;
     // ID: 0 = neutraler Platz, 1 = kein neutraler platz
     private $venue;
-    // ID: 1 = Liga, 2 = Pokal, 3 = International; 4 = Freundschaftsspiel
+    // ID: 0 = Liga, 1 = Pokal, 2 = International; 3 = Freundschaftsspiel
     private $comp;
     
     public function __construct( $_id, team $_home, team $_away, $_venue = 0, $_comp = 0 ) {
-		if ( $_id ) {
-			// Daten aus MySQL-DB holen
-		}
-		else {
+//		if ( $_id ) {
+//			// Daten aus MySQL-DB holen
+//		}
+//		else {
 			$this->id = 0;
 			$this->home = $_home;
 			$this->away = $_away;
 			$this->venue = $_venue;
 			$this->comp = $_comp;
-		}
+//		}
     }
     
     public function get_id() {
         return $this->id;
     }
 	
-    public function set_id($id) {
+    public function set_id( $id ) {
         $this->id = $id;
     }
 
@@ -46,7 +48,7 @@ class match {
         return $this->home;
     }
 
-    public function set_home($home) {
+    public function set_home( $home ) {
         $this->home = $home;
     }
 
@@ -54,7 +56,7 @@ class match {
         return $this->away;
     }
 
-    public function set_away($away) {
+    public function set_away( $away ) {
         $this->away = $away;
     }
 
@@ -62,7 +64,7 @@ class match {
         return $this->home_score;
     }
 
-    public function set_home_score($home_score) {
+    public function set_home_score( $home_score ) {
         $this->home_score = $home_score;
     }
 
@@ -70,7 +72,7 @@ class match {
         return $this->away_score;
     }
 
-    public function set_away_score($away_score) {
+    public function set_away_score( $away_score ) {
         $this->away_score = $away_score;
     }
 
@@ -78,7 +80,7 @@ class match {
         return $this->venue;
     }
 
-    public function set_venue($venue) {
+    public function set_venue( $venue ) {
         $this->venue = $venue;
     }
 
@@ -86,7 +88,7 @@ class match {
         return $this->comp;
     }
 
-    public function set_comp($comp) {
+    public function set_comp( $comp ) {
         $this->comp = $comp;
     }
 

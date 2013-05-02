@@ -12,13 +12,13 @@ class rating {
 	private $date;
 	
 	public function __construct( $_id, $_points = 0 ) {
-		if ( $_id ) {
-			// aus DB
-		}
-		else {
+//		if ( $_id ) {
+//			// aus DB
+//		}
+//		else {
 			$this->id = 0;
 			$this->points = $_points;
-		}
+//		}
 	}
 	
 	public function get_id() {

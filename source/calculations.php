@@ -1,8 +1,10 @@
 <?php
+require_once 'classes/team.class.php';
+require_once 'classes/match.class.php';
 
 function calculate_expected_score( team $_home, team $_away ) {
-	$rating_home = $_home->get_rating();
-	$rating_away = $_away->get_rating();
+	$rating_home = $_home->get_rating_points();
+	$rating_away = $_away->get_rating_points();
 	
 	$expected_score_home = 1 / ( 1 + ( pow( 10 , ( $rating_away - $rating_home ) / 400 ) ) );
 	$expected_score_away = 1 / ( 1 + ( pow( 10 , ( $rating_home - $rating_away ) / 400 ) ) );

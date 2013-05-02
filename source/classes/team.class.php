@@ -14,14 +14,14 @@ class team {
     private $rating_points;
     
 	public function __construct( $_id, $_rating_points = 0, $_name = "" ) {
-		if ( $_id ) {
-			// aus DB holen
-		}
-		else {
+//		if ( $_id ) {
+//			// aus DB holen
+//		}
+//		else {
 			$this->id = 0;
 			$this->name = $_name;
 			$this->rating_points = $_rating_points;
-		}
+//		}
 	}
     
     public function get_id() {
