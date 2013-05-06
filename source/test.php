@@ -12,6 +12,12 @@ $match = new match( 0, $team_1, $team_2 );
 
 $score = $match->get_home_expected();
 echo "$score";
+echo '<br>';
+
+$match->set_scores( 16, 2 );
+
+$change = calculate_rating_changes( $match );
+print_r( $change );
 
 //if (is_object( $match->get_home() ) )
 //	echo 'ja';
