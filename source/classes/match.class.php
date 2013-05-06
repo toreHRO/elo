@@ -58,6 +58,7 @@ class match {
     private $venue;
 	/**
 	 * Art des Wettbewerbs (competition)
+	 * ??? umrechnen in Bewertungsfaktore: 20, 30 ...
 	 * @var int 0 = Liga; 1 = Pokal; 2 = International; 3 = Freundschaftspiel
 	 */
     private $comp;
@@ -66,6 +67,16 @@ class match {
 	 * @var date 
 	 */
 	private $date;
+	/**
+	 * absoluter Betrag der Tor-/Punktedifferenz des Matches
+	 * @var int 
+	 */
+	private $diff;
+	/**
+	 * Faktor aus der Tor-/Puktedifferenz; wichtig für Berechnung
+	 * @var float 
+	 */
+	private $diff_factor;
     
     public function __construct( $_id, team $_home, team $_away, $_venue = 0, $_comp = 0 ) {
 //		if ( $_id ) {
@@ -187,6 +198,33 @@ class match {
 		$this->date = $_date;
 	}
 	
+	public function get_diff() {
+		$this->diff = abs( $this->home_score - $this->away_score );
+		return $this->diff;
+	}
+
+	public function set_diff( $_diff ) {
+		$this->diff = $_diff;
+	}
+
+	public function get_diff_factor() {
+		$difference = $this->get_diff(); 
+		if ( $difference == 0 || $difference == 1 ) {
+			$this->diff_factor = 1;
+		}
+		elseif ( $difference == 2 ) {
+			$this->diff_factor = 1.5;
+		}
+		else {
+			$this->diff_factor = ( 11 + $difference )/8;
+		}
+		return $this->diff_factor;
+	}
+
+	public function set_diff_factor( $_diff_factor ) {
+		$this->diff_factor = $_diff_factor;
+	}
+		
 	/**
 	 * gibt den Ausgang für das Heimteam zurück
 	 * @return float 0 = Niederlage; 0,5 = Unentschieden; 1 = Sieg
@@ -263,7 +301,7 @@ class match {
 	 */
 	public function get_home_expected() {
 		if ( !$this->home_expected ) {
-			$expected_scores = calculate_expected_score( $this->home, $this->away );
+			$expected_scores = calculate_expected_score( $this->home, $this->away, $this->venue );
 			$this->home_expected = $expected_scores[ "home" ];
 			$this->away_expected = $expected_scores[ "away" ];
 		}
@@ -282,7 +320,7 @@ class match {
 	 */
 	public function get_away_expected() {
 		if ( !$this->away_expected ) {
-			$expected_scores = calculate_expected_score( $this->home, $this->away );
+			$expected_scores = calculate_expected_score( $this->home, $this->away, $this->venue );
 			$this->home_expected = $expected_scores[ "home" ];
 			$this->away_expected = $expected_scores[ "away" ];
 		}
@@ -298,7 +336,7 @@ class match {
 	 * speichert die neuen Ratings in der Datenbank
 	 * @return boolean 
 	 */
-	public function save_new_ratings() {
+	public function set_new_ratings() {
 		$changes = calculate_rating_changes( $this );
 		$home_new = $this->home->get_rating_points() + $changes[ "home" ];
 		$away_new = $this->away->get_rating_points() + $changes[ "away" ];

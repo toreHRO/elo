@@ -61,7 +61,7 @@ class team {
 		return $this->rating;
 	}
 
-	public function set_rating( $_rating ) {
+	public function set_rating( rating $_rating ) {
 		$this->rating = $_rating;
 	}
 
@@ -69,8 +69,14 @@ class team {
 		return $this->rating_points;
 	}
 
-	public function set_rating_points( $rating_points ) {
-		$this->rating_points = $rating_points;
+	public function set_rating_points( $_rating_points, $_date = 0 ) {
+		$this->rating_points = $_rating_points;
+		
+		$this->rating = new rating( 0, $_rating_points );
+		$this->rating->set_date( $_date );
+		$this->rating->write_ratings_in_db();
+		
+		return 1;
 	}
 
 
